@@ -14,7 +14,7 @@ Before using credstasher, you need to:
 
 There are commands to help with some of these things, but I would recommend having this stuff set up before you use.
 
-## How to use: CLI
+## CLI Usage
 
 ### Install or not
 
@@ -98,6 +98,24 @@ Command-specific options:
   - `-a, --all`: Delete all versions
 
 ## Library Usage
+
+### Install
+
+Install with your favorite package manager:
+
+```bash
+npm install node-credstasher
+
+# or
+
+pnpm add node-credstasher
+
+# or
+
+bun add node-credstasher
+```
+
+### Example
 
 ```typescript
 import { CredstashClient } from 'node-credstasher';
