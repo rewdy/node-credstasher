@@ -1,0 +1,31 @@
+services:
+  dynamodb:
+    image: amazon/dynamodb-local
+    ports:
+      - "8000:8000"
+    environment:
+      AWS_DEFAULT_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: dummyaccess
+      AWS_SECRET_ACCESS_KEY: dummysecret
+    command: "-jar DynamoDBLocal.jar -sharedDb -inMemory"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+  
+  kms:
+    image: nsmithuk/local-kms
+    ports:
+      - "4599:8080"  # Changed to avoid conflict with localstack
+    environment:
+      - PORT=8080
+      - KMS_ACCOUNT_ID=123456789012
+      - KMS_REGION=us-east-1
+    volumes:
+      - ./setup/local-kms:/init
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/"]
+      interval: 30s
+      timeout: 10s
+      retries: 5

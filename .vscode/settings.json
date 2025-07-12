@@ -1,0 +1,10 @@
+{
+  "cSpell.words": ["Ciphertext", "credstasher"],
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome",
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "always",
+      "source.organizeImports": "always"
+    }
+  }
+}
