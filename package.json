@@ -1,6 +1,6 @@
 {
   "name": "node-credstasher",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A TypeScript implementation of credstash for storing and retrieving secrets using AWS KMS and DynamoDB.",
   "author": "Andrew Meyer <andrew@rewdy.com>",
   "license": "MIT",
