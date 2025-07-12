@@ -1,14 +1,14 @@
 # Local Testing Setup for node-credstasher
 
-This document explains how to set up and use the local KMS and DynamoDB services for testing your credstash implementation.
+This document explains how to set up and use the local KMS and DynamoDB services for testing the code. It's easier to test with fake dynamodb and KMS then trying to mock everything. This explains the steps to doing this.
 
 ## Prerequisites
 
 - Docker and Docker Compose installed
 - AWS CLI installed (for testing connectivity)
-- Node.js/Bun installed
+- Bun installed (everything here uses bun; you will need to develop this repo)
 
-## Services
+## Docker Services that will Run
 
 ### Local KMS
 
@@ -26,20 +26,38 @@ This document explains how to set up and use the local KMS and DynamoDB services
 
 1. **Start the services:**
 
-   ```bash
-   bun run local:start
-   ```
+    ```bash
+    bun run local:start
 
-2. **Run the tests:**
+    # or if you prefer
 
-   ```bash
-   bun run test
-   ```
+    docker compose up -d
+    ```
 
-3. **Stop the services:**
-   ```bash
-   bun run local:stop
-   ```
+1. **Run the tests:**
+
+    ```bash
+    # run all tests
+    bun run test
+
+    # or run separately...
+
+    # run just the typescript tests
+    bun run test:lib
+
+    # run the bash cli tests
+    bun run test:cli
+    ```
+
+1. **Stop the services:**
+
+    ```bash
+    bun run local:stop
+
+    # or if you prefer
+
+    docker compose down
+    ```
 
 ## Environment Variables
 
@@ -132,10 +150,3 @@ const client = new CredstashClient({
 
 - Ensure the DynamoDB service is running: `aws dynamodb list-tables --endpoint-url http://localhost:8000`
 - Create the table if it doesn't exist: `bun run cli -- setup`
-
-## Available Scripts
-
-- `bun run local:start` - Start Docker services
-- `bun run local:stop` - Stop Docker services
-- `bun run test:cli` - Run cli tests
-- `bun run test:lib` - Run library tests

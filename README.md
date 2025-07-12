@@ -2,7 +2,7 @@
 
 A TypeScript implementation of the python [credstash](https://pypi.org/project/credstash/) for storing and retrieving secrets using AWS KMS and DynamoDB.
 
-This code is based on the now defunct `node-credstash` library, but has been updated to TypeScript with up-to-date dependencies.
+This code is based on the now defunct [node-credstash](https://github.com/rotaready/node-credstash) library, but has been updated to TypeScript with up-to-date dependencies.
 
 ## Setup
 
@@ -10,9 +10,7 @@ Before using credstasher, you need to:
 
 1. Set up AWS credentials (AWS CLI, environment variables, or IAM roles)
 2. Create a KMS key or use an existing one
-3. Optionally create a DynamoDB table (the library can create it automatically)
-
-There are commands to help with some of these things, but I would recommend having this stuff set up before you use.
+3. Optionally create a DynamoDB table (the library _can_ create it for you, but it's better if you set up before)
 
 ## CLI Usage
 
@@ -26,6 +24,10 @@ npm install -g node-credstasher
 # or
 
 pnpm add -g node-credstasher
+
+# or
+
+bun add -g node-credstasher
 ```
 
 After it is installed, you should be able to run the following to show the docs:
@@ -37,12 +39,22 @@ credstasher --help
 Yuu can also run using `npx`, `pnpx`, etc. downloading it to run on the fly. This is kind of nice.
 
 ```bash
-npx credstasher@latest --help
+npx node-credstasher@latest --help
+
+# or
+
+pnpx node-credstasher@latest --help
+
+# or
+
+bunx node-credstasher@latest --help
 ```
 
-### CLI Usage
+### Commands
 
 #### Setup the DynamoDB table
+
+⚠️ I don't recommend using this. Set up your table in a more managed way, probably. But, you _can_ do it this way if you like.
 
 ```bash
 credstasher setup
@@ -181,6 +193,10 @@ bun run lint
 ```bash
 bun run check
 ```
+
+### Tests
+
+See [LOCAL_TESTING.md](./LOCAL_TESTING.md).
 
 ## Security Features
 
