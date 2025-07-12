@@ -2,6 +2,9 @@
   "name": "node-credstasher",
   "version": "0.0.1",
   "description": "A TypeScript implementation of credstash for storing and retrieving secrets using AWS KMS and DynamoDB.",
+  "author": "Andrew Meyer <andrew@rewdy.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/rewdy/node-credstasher",
   "keywords": [
     "credstash",
     "aws",
@@ -22,8 +25,8 @@
     }
   },
   "bin": {
-    "credstasher": "./dist/commands.cjs",
-    "node-credstasher": "./dist/commands.cjs"
+    "credstasher": "./cli/commands.cjs",
+    "node-credstasher": "./cli/commands.cjs"
   },
   "files": [
     "dist",
@@ -69,5 +72,9 @@
     "@aws-sdk/lib-dynamodb": "3.844.0",
     "aes-js": "^3.1.2",
     "aws-sdk": "2.1692.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }
