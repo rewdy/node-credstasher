@@ -50,6 +50,9 @@ jobs:
       - name: Wait for services to be ready
         run: ./setup/ensure-services-running.sh
 
+      - name: Set up test env vars
+        run: source .env.local
+
       - name: Run library tests
         run: bun run test:lib
 
