@@ -1,0 +1,41 @@
+name: 'Semantic Release Action'
+description: 'Setup environment and run semantic-release'
+inputs:
+  dry-run:
+    description: 'Run in dry-run mode'
+    required: false
+    default: 'false'
+  github-token:
+    description: 'GitHub token for semantic-release'
+    required: true
+  npm-token:
+    description: 'NPM token for publishing'
+    required: false
+  bun-version:
+    description: 'Bun version to use'
+    required: false
+    default: '1.2.7'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup Bun
+      uses: oven-sh/setup-bun@v2
+      with:
+        bun-version: ${{ inputs.bun-version }}
+
+    - name: Install dependencies
+      run: bun install --frozen-lockfile
+      shell: bash
+
+    - name: Run semantic release
+      run: bunx semantic-release ${{ inputs.dry-run == 'true' && '--dry-run' || '' }}
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+        NPM_TOKEN: ${{ inputs.npm-token }}

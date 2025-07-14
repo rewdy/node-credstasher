@@ -91,3 +91,15 @@ jobs:
       #       dist/
       #       cli/
       #     retention-days: 1
+
+  release-preview:
+    name: Release Preview
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+      - name: Setup and run semantic release
+        uses: ./.github/actions/semantic-release
+        with:
+          dry-run: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
