@@ -15,16 +15,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: ${{ env.BUN_VERSION }}
-
-      - name: Install dependencies
-        run: bun install --frozen-lockfile
+      - name: Setup Node environment
+        uses: ./.github/actions/setup-node-env
 
       - name: Run Biome check
         run: bun run check
@@ -37,16 +29,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: ${{ env.BUN_VERSION }}
-
-      - name: Install dependencies
-        run: bun install --frozen-lockfile
+      - name: Setup Node environment
+        uses: ./.github/actions/setup-node-env
 
       - name: Start local services
         run: bun run local:start
@@ -69,16 +53,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: ${{ env.BUN_VERSION }}
-
-      - name: Install dependencies
-        run: bun install --frozen-lockfile
+      - name: Setup Node environment
+        uses: ./.github/actions/setup-node-env
 
       - name: Build project
         run: bun run build
@@ -89,8 +65,8 @@ jobs:
     if: github.event_name == 'pull_request'
     
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Setup Node environment
+        uses: ./.github/actions/setup-node-env
         with:
           fetch-depth: 0
 
