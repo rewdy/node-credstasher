@@ -6,9 +6,6 @@ on:
       - main
   pull_request:
 
-env:
-  BUN_VERSION: 1.2.7
-
 jobs:
   lint-and-typecheck:
     name: Lint and Type Check
@@ -87,3 +84,4 @@ jobs:
         with:
           dry-run: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          npm-token: ${{ secrets.NPM_TOKEN }}
