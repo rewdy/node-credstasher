@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+
+# Auto-fix formatting and linting issues with Biome (staged files only)
+# Only run if there are staged files to avoid failure on amend commits
+if git diff --cached --quiet; then
+  printf "\033[38;5;246mNo staged files, skipping Biome check\033[0m"
+else
+  bun run biome check --staged --write
+fi
