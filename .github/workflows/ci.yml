@@ -83,11 +83,19 @@ jobs:
       - name: Build project
         run: bun run build
 
-      # - name: Upload build artifacts
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: build-artifacts
-      #     path: |
-      #       dist/
-      #       cli/
-      #     retention-days: 1
+  release-preview:
+    name: Release Preview
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup and run semantic release
+        uses: ./.github/actions/semantic-release
+        with:
+          dry-run: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
