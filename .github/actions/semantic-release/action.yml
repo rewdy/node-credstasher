@@ -1,5 +1,5 @@
 name: 'Semantic Release Action'
-description: 'Setup environment and run semantic-release'
+description: 'Run semantic-release'
 inputs:
   dry-run:
     description: 'Run in dry-run mode'
@@ -15,15 +15,6 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Setup Bun
-      uses: oven-sh/setup-bun@v2
-      with:
-        bun-version: ${{ inputs.bun-version }}
-
-    - name: Install dependencies
-      run: bun install --frozen-lockfile
-      shell: bash
-
     - name: Run semantic release
       run: bunx semantic-release ${{ inputs.dry-run == 'true' && '--dry-run' || '' }}
       shell: bash
