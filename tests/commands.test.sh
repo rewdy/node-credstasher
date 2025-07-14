@@ -45,7 +45,7 @@ log_fail() {
 
 # CLI command wrapper
 run_cli() {
-    bun run cli -- "$@"
+    node cli/commands.cjs "$@"
 }
 
 # Test helper to check command output
@@ -132,6 +132,10 @@ cleanup() {
         fi
     }
 }
+
+echo "Building fresh CLI..."
+
+bun build:cli
 
 # Set up cleanup trap
 trap cleanup EXIT
