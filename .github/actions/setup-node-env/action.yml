@@ -1,10 +1,6 @@
 name: 'Setup Node Environment'
-description: 'Checkout code, setup Bun, and install dependencies'
+description: 'Setup Bun and install dependencies'
 inputs:
-  fetch-depth:
-    description: 'Number of commits to fetch (0 for all history)'
-    required: false
-    default: '1'
   frozen-lockfile:
     description: 'Use frozen lockfile for install'
     required: false
@@ -13,11 +9,6 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: ${{ inputs.fetch-depth }}
-
     - name: Setup Bun
       uses: oven-sh/setup-bun@v2
       with:
