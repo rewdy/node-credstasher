@@ -11,10 +11,6 @@ inputs:
   npm-token:
     description: 'NPM token for publishing'
     required: false
-  bun-version:
-    description: 'Bun version to use'
-    required: false
-    default: '1.2.7'
 
 runs:
   using: 'composite'
