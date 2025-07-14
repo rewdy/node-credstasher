@@ -73,7 +73,6 @@ export AWS_SECRET_ACCESS_KEY=dummysecret
 export AWS_REGION=us-east-1
 
 # Credstash Configuration
-export CREDSTASH_ENDPOINT=http://localhost:4599
 export CREDSTASH_TABLE=credential-store-test-cli
 export CREDSTASH_KMS_KEY_ID=alias/credstash
 

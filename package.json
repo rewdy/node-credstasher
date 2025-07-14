@@ -34,36 +34,43 @@
   ],
   "scripts": {
     "build": "bun run build:lib && bun run build:cli",
-    "build:lib": "rslib build",
     "build:cli": "bun build ./src/commands.ts --outfile=cli/commands.cjs --target=node --format=cjs --external:aws-sdk,commander,crypto,aes-js --minify",
-    "check:fix": "biome check . --write",
+    "build:lib": "rslib build",
     "check": "biome check .",
+    "check:fix": "biome check . --write",
     "clean": "rm -rf dist cli credstash.log",
     "cli": "bun run ./src/commands.ts",
     "example": "bun run example.ts",
-    "format:check": "biome format .",
     "format": "biome format . --write",
-    "local:start": "docker-compose up -d",
-    "local:stop": "docker-compose down",
+    "format:check": "biome format .",
+    "lint": "biome lint .",
+    "lint:fix": "biome lint . --write",
+    "local:start": "docker compose up -d",
+    "local:stop": "docker compose down",
+    "preflight": "bun run typecheck && bun run check",
+    "prepare": "husky",
     "test": "bun run test:lib && bun run test:cli",
-    "test:lib": "bun test",
     "test:cli": "./tests/commands.test.sh",
+    "test:lib": "bun test",
     "test:local": "bun test test-local.ts",
     "test:watch": "bun test --watch",
-    "lint:fix": "biome lint . --write",
-    "lint": "biome lint .",
-    "preflight": "bun run typecheck && bun run check",
     "typecheck": "tsc --noEmit --strict"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.1.1",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
     "@rslib/core": "^0.10.5",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
     "@types/aes-js": "^3.1.4",
     "@types/bun": "latest",
     "@types/node": "24.0.13",
     "aws-sdk-client-mock": "^4.1.0",
     "commander": "^14.0.0",
     "crypto": "1.0.1",
+    "husky": "^9.1.7",
+    "semantic-release": "^24.2.7",
     "typescript": "^5"
   },
   "dependencies": {
@@ -76,5 +83,10 @@
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   }
 }

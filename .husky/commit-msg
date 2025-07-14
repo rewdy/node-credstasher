@@ -1,0 +1,21 @@
+#!/usr/bin/env sh
+
+npx --no -- commitlint --edit "$1" || {
+  printf "\033[33m
+FYI: Your commit message does not use conventional commits. This is fine,
+but it means \033[35mit will not create a new release\033[33m. If you would like
+for it to make a new release, please format your commit message with one of
+the commit message prefixes: 
+  \033[34mfeat:, fix:, docs:, style:, refactor:, build:, test:, ci:, or chore:\033[33m
+
+- \033[34mfeat:\033[33m will bump the minor version
+- \033[34mfix:\033[33m will bump the patch version
+- To bump a major version include an exclamation point after the type (e.g. \033[34mfeat!:\033[33m)
+- All other types will not create a new release
+
+If you want to edit your last commit message, you can run:
+  \033[32mgit commit --amend\033[33m
+
+- Full spec: https://www.conventionalcommits.org/en/v1.0.0/\n\
+- Cheatsheet: https://gist.github.com/Zekfad/f51cb06ac76e2457f11c80ed705c95a3\033[0m\n\n"
+}

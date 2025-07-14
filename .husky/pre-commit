@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+# Auto-fix formatting and linting issues with Biome (staged files only)
+bun run biome check --staged --no-errors-on-unmatched --write 

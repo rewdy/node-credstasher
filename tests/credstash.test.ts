@@ -17,10 +17,12 @@ describe("CredstashClient", () => {
   const originalEnv = process.env;
 
   beforeAll(async () => {
-    // Clear environment variables before each test
-    // We do this because we are testing defaults here. We set our test
-    // specific config using localConfig above.
-    process.env = {};
+    // Set up our env in a controlled way. Original env is saved above.
+    process.env = {
+      AWS_REGION: "us-east-1",
+      AWS_ACCESS_KEY_ID: "dummyaccess",
+      AWS_SECRET_ACCESS_KEY: "dummysecret",
+    };
 
     // Create client with local configuration
     client = new CredstashClient(localConfig);
