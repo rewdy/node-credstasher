@@ -1,0 +1,20 @@
+name: 'Setup Node Environment'
+description: 'Setup Bun and install dependencies'
+inputs:
+  frozen-lockfile:
+    description: 'Use frozen lockfile for install'
+    required: false
+    default: 'true'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Bun
+      uses: oven-sh/setup-bun@v2
+      with:
+        # If we update Bun, we must change here as well!
+        bun-version: 1.2.7 
+
+    - name: Install dependencies
+      run: bun install ${{ inputs.frozen-lockfile == 'true' && '--frozen-lockfile' || '' }}
+      shell: bash

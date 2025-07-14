@@ -29,8 +29,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install dependencies
-        run: bun install --frozen-lockfile
+      - name: Setup Node environment
+        uses: ./.github/actions/setup-node-env
 
       - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
         run: npm audit signatures
