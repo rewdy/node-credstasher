@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { Command } from "commander";
-import { CredstashClient } from "./lib/credstash";
+import { CredstashClient } from "./lib/credstash.js";
 import type {
   CommandOptions,
   DeleteCommandOptions,

@@ -29,6 +29,10 @@ jobs:
 
       - name: Setup Node environment
         uses: ./.github/actions/setup-node-env
+      
+      # We need to build here since the release includes the built assets
+      - name: Build the project
+        run: bun run build
 
       - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
         run: npm audit signatures
