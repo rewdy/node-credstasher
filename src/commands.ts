@@ -18,6 +18,35 @@ import type {
 const DEFAULT_REGION = "us-east-1";
 const DEFAULT_TABLE = "credential-store";
 
+const handleAWSCreds = async <R>(func: () => Promise<R>): Promise<R> => {
+  let awsProfile: string | undefined;
+  if (
+    process.env.AWS_PROFILE &&
+    process.env.AWS_ACCESS_KEY_ID &&
+    process.env.AWS_SECRET_ACCESS_KEY
+  ) {
+    // AWS Profile AND access key pair is set. Cache and unset the profile.
+    // We will restore after.
+    awsProfile = process.env.AWS_PROFILE;
+    delete process.env.AWS_PROFILE;
+  }
+  try {
+    const result = await func();
+    return result;
+  } catch {
+    // Ensure AWS profile is restored before exiting
+    if (awsProfile) {
+      process.env.AWS_PROFILE = awsProfile;
+    }
+    process.exit(1);
+  } finally {
+    if (awsProfile) {
+      // Now restore the profile.
+      process.env.AWS_PROFILE = awsProfile;
+    }
+  }
+};
+
 const program = new Command();
 
 program
@@ -30,7 +59,7 @@ program
   .option("-p, --profile <profile>", "AWS profile")
   .option(
     "-d, --dynamodb-endpoint <endpoint>",
-    "Custom endpoint URL for DynamoDB",
+    "Custom endpoint URL for DynamoDB"
   )
   .option("-e, --kms-endpoint <endpoint>", "Custom KMS endpoint URL");
 
@@ -50,28 +79,30 @@ program
   .command("list")
   .description("List all stored credentials")
   .action(async (_options) => {
-    try {
-      const credstash = getCredstashClient(program.opts());
-      await credstash.checkForTable();
-      const secrets = await credstash.listSecrets();
+    await handleAWSCreds(async () => {
+      try {
+        const credstash = getCredstashClient(program.opts());
+        await credstash.checkForTable();
+        const secrets = await credstash.listSecrets();
 
-      if (secrets.length === 0) {
-        console.log("No secrets found.");
-        return;
+        if (secrets.length === 0) {
+          console.log("No secrets found.");
+          return;
+        }
+
+        console.log("Stored secrets:\n");
+        secrets.forEach((secret) => {
+          console.log(`${secret.name} (v: ${secret.version})`);
+        });
+        console.log(`\nTotal secrets: ${secrets.length}`);
+      } catch (error) {
+        console.error(
+          "Error listing secrets:",
+          error instanceof Error ? error.message : error
+        );
+        throw error;
       }
-
-      console.log("Stored secrets:\n");
-      secrets.forEach((secret) => {
-        console.log(`${secret.name} (v: ${secret.version})`);
-      });
-      console.log(`\nTotal secrets: ${secrets.length}`);
-    } catch (error) {
-      console.error(
-        "Error listing secrets:",
-        error instanceof Error ? error.message : error,
-      );
-      process.exit(1);
-    }
+    });
   });
 
 program
@@ -81,33 +112,35 @@ program
   .option("-c, --context <context>", "Encryption context (JSON string)")
   .option("-a, --autoversion", "Automatically increment version")
   .action(async (name, secret, options: PutCommandOptions) => {
-    try {
-      const credstash = getCredstashClient(program.opts());
-      await credstash.checkForTable();
+    await handleAWSCreds(async () => {
+      try {
+        const credstash = getCredstashClient(program.opts());
+        await credstash.checkForTable();
 
-      const putOptions: CredstashPutOptions = {
-        version: options.keyVersion,
-        autoversion: options.autoversion,
-      };
+        const putOptions: CredstashPutOptions = {
+          version: options.keyVersion,
+          autoversion: options.autoversion,
+        };
 
-      if (options.context) {
-        try {
-          putOptions.context = JSON.parse(options.context);
-        } catch (_error) {
-          console.error("Invalid JSON in context option");
-          process.exit(1);
+        if (options.context) {
+          try {
+            putOptions.context = JSON.parse(options.context);
+          } catch (_error) {
+            console.error("Invalid JSON in context option");
+            throw new Error("Invalid JSON in context option");
+          }
         }
-      }
 
-      await credstash.putSecret(name, secret, putOptions);
-      console.log(`Secret '${name}' stored successfully.`);
-    } catch (error) {
-      console.error(
-        "Error storing secret:",
-        error instanceof Error ? error.message : error,
-      );
-      process.exit(1);
-    }
+        await credstash.putSecret(name, secret, putOptions);
+        console.log(`Secret '${name}' stored successfully.`);
+      } catch (error) {
+        console.error(
+          "Error storing secret:",
+          error instanceof Error ? error.message : error
+        );
+        throw error;
+      }
+    });
   });
 
 program
@@ -117,38 +150,40 @@ program
   .option("-c, --context <context>", "Encryption context (JSON string)")
   .option("-n, --noline", "Don't append newline")
   .action(async (name, options: GetCommandOptions) => {
-    try {
-      const credstash = getCredstashClient(program.opts());
-      await credstash.checkForTable();
+    await handleAWSCreds(async () => {
+      try {
+        const credstash = getCredstashClient(program.opts());
+        await credstash.checkForTable();
 
-      const getOptions: CredstashGetOptions = {
-        version: options.keyVersion,
-        noline: options.noline,
-      };
+        const getOptions: CredstashGetOptions = {
+          version: options.keyVersion,
+          noline: options.noline,
+        };
 
-      if (options.context) {
-        try {
-          getOptions.context = JSON.parse(options.context);
-        } catch (_error) {
-          console.error("Invalid JSON in context option");
-          process.exit(1);
+        if (options.context) {
+          try {
+            getOptions.context = JSON.parse(options.context);
+          } catch (_error) {
+            console.error("Invalid JSON in context option");
+            throw new Error("Invalid JSON in context option");
+          }
         }
-      }
 
-      const secret = await credstash.getSecret(name, getOptions);
+        const secret = await credstash.getSecret(name, getOptions);
 
-      if (options.noline) {
-        process.stdout.write(secret);
-      } else {
-        console.log(secret);
+        if (options.noline) {
+          process.stdout.write(secret);
+        } else {
+          console.log(secret);
+        }
+      } catch (error) {
+        console.error(
+          "Error retrieving secret:",
+          error instanceof Error ? error.message : error
+        );
+        throw error;
       }
-    } catch (error) {
-      console.error(
-        "Error retrieving secret:",
-        error instanceof Error ? error.message : error,
-      );
-      process.exit(1);
-    }
+    });
   });
 
 program
@@ -157,46 +192,50 @@ program
   .option("-v, --key-version <version>", "Version number")
   .option("-a, --all", "Delete all versions")
   .action(async (name, options: DeleteCommandOptions) => {
-    try {
-      const credstash = getCredstashClient(program.opts());
-      await credstash.checkForTable();
+    await handleAWSCreds(async () => {
+      try {
+        const credstash = getCredstashClient(program.opts());
+        await credstash.checkForTable();
 
-      const deleteOptions: CredstashDeleteOptions = {
-        version: options.keyVersion,
-        all: options.all,
-      };
+        const deleteOptions: CredstashDeleteOptions = {
+          version: options.keyVersion,
+          all: options.all,
+        };
 
-      await credstash.deleteSecret(name, deleteOptions);
+        await credstash.deleteSecret(name, deleteOptions);
 
-      if (options.all) {
-        console.log(`All versions of secret '${name}' deleted successfully.`);
-      } else {
-        console.log(`Secret '${name}' deleted successfully.`);
+        if (options.all) {
+          console.log(`All versions of secret '${name}' deleted successfully.`);
+        } else {
+          console.log(`Secret '${name}' deleted successfully.`);
+        }
+      } catch (error) {
+        console.error(
+          "Error deleting secret:",
+          error instanceof Error ? error.message : error
+        );
+        throw error;
       }
-    } catch (error) {
-      console.error(
-        "Error deleting secret:",
-        error instanceof Error ? error.message : error,
-      );
-      process.exit(1);
-    }
+    });
   });
 
 program
   .command("setup")
   .description("Create the DynamoDB table for credstash")
   .action(async () => {
-    try {
-      const credstash = getCredstashClient(program.opts());
-      await credstash.ensureTableExists();
-      console.log("DynamoDB table created or already exists.");
-    } catch (error) {
-      console.error(
-        "Error setting up table:",
-        error instanceof Error ? error.message : error,
-      );
-      process.exit(1);
-    }
+    await handleAWSCreds(async () => {
+      try {
+        const credstash = getCredstashClient(program.opts());
+        await credstash.ensureTableExists();
+        console.log("DynamoDB table created or already exists.");
+      } catch (error) {
+        console.error(
+          "Error setting up table:",
+          error instanceof Error ? error.message : error
+        );
+        throw error;
+      }
+    });
   });
 
 program.parse();
