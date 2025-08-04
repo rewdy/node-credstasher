@@ -59,7 +59,7 @@ program
   .option("-p, --profile <profile>", "AWS profile")
   .option(
     "-d, --dynamodb-endpoint <endpoint>",
-    "Custom endpoint URL for DynamoDB"
+    "Custom endpoint URL for DynamoDB",
   )
   .option("-e, --kms-endpoint <endpoint>", "Custom KMS endpoint URL");
 
@@ -98,7 +98,7 @@ program
       } catch (error) {
         console.error(
           "Error listing secrets:",
-          error instanceof Error ? error.message : error
+          error instanceof Error ? error.message : error,
         );
         throw error;
       }
@@ -136,7 +136,7 @@ program
       } catch (error) {
         console.error(
           "Error storing secret:",
-          error instanceof Error ? error.message : error
+          error instanceof Error ? error.message : error,
         );
         throw error;
       }
@@ -179,7 +179,7 @@ program
       } catch (error) {
         console.error(
           "Error retrieving secret:",
-          error instanceof Error ? error.message : error
+          error instanceof Error ? error.message : error,
         );
         throw error;
       }
@@ -212,7 +212,7 @@ program
       } catch (error) {
         console.error(
           "Error deleting secret:",
-          error instanceof Error ? error.message : error
+          error instanceof Error ? error.message : error,
         );
         throw error;
       }
@@ -231,7 +231,7 @@ program
       } catch (error) {
         console.error(
           "Error setting up table:",
-          error instanceof Error ? error.message : error
+          error instanceof Error ? error.message : error,
         );
         throw error;
       }
