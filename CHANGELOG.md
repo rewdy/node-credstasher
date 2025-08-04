@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/rewdy/node-credstasher/compare/v1.0.1...v1.0.2) (2025-08-04)
+
+
+### Bug Fixes
+
+* handle when both AWS_PROFILE and key pairs are set ([2991783](https://github.com/rewdy/node-credstasher/commit/29917835fa67aacaaa0aca4aeaf5c61d5961ba3a))
+
 ## [1.0.1](https://github.com/rewdy/node-credstasher/compare/v1.0.0...v1.0.1) (2025-07-14)
 
 
