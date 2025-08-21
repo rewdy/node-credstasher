@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/rewdy/node-credstasher/compare/v1.0.2...v1.0.3) (2025-08-21)
+
+
+### Bug Fixes
+
+* updates dependencies ([37dd0f5](https://github.com/rewdy/node-credstasher/commit/37dd0f54f5f5a3f0e6cbc666d403bc1d70560f9e))
+
 ## [1.0.2](https://github.com/rewdy/node-credstasher/compare/v1.0.1...v1.0.2) (2025-08-04)
 
 
