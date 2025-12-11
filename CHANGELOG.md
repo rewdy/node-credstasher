@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/rewdy/node-credstasher/compare/v1.0.3...v1.0.4) (2025-12-11)
+
+
+### Bug Fixes
+
+* removes old aws-sdk dependency ([381d0f0](https://github.com/rewdy/node-credstasher/commit/381d0f0c69114f48bae3ab29ba142f64a9e46fa8))
+
 ## [1.0.3](https://github.com/rewdy/node-credstasher/compare/v1.0.2...v1.0.3) (2025-08-21)
 
 
